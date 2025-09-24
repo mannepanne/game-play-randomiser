@@ -4,113 +4,79 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is the **Game Play Randomiser** project - a simple web application that simulates drawing cards from a deck for tabletop gaming.
+The **Game Play Randomiser** is a web-based card drawing simulator for tabletop gaming. It replaces physical playing cards with a digital deck that maintains state between gaming sessions.
 
-**Current Status**: ✅ **COMPLETED AND DEPLOYED**
-- **Live Site**: https://gameplay.hultberg.org
-- **Repository**: https://github.com/mannepanne/game-play-randomiser
-- **Deployment**: CloudFlare Workers with custom domain
+🌐 **Live Site**: https://gameplay.hultberg.org
+📝 **Repository**: https://github.com/mannepanne/game-play-randomiser
+⚡ **Status**: Phase One completed and deployed
 
-**Key Requirements** (✅ ALL COMPLETED):
-- ✅ Replace physical playing cards with a digital alternative
-- ✅ Simulate standard 52-card deck + 2 jokers (54 cards total)
-- ✅ Split deck into 4 piles by suit: Hearts, Diamonds, Spades, Clubs
-- ✅ Jokers randomly assigned to red/black piles
-- ✅ Draw one card from each pile per round (4 cards total)
-- ✅ Maintain game state between rounds using local browser storage
-- ✅ Simple web page implementation - no user management needed
-- ✅ Mobile-responsive design
-- ✅ Production deployment with custom domain
+## How It Works (Quick Start for Developers)
 
-## Technology Stack (IMPLEMENTED)
+**Core Concept**: Simulate drawing cards from 4 separate piles (Hearts, Diamonds, Spades, Clubs) for tabletop games that require randomized card values.
 
-✅ **Actual Implementation**:
-- **Frontend**: Vanilla HTML/CSS/JavaScript (single page application)
-- **Storage**: Local browser storage (localStorage for game state persistence)
-- **Styling**: Custom CSS with mobile-responsive design
-- **Hosting**: CloudFlare Workers with Assets API
-- **Domain**: Custom domain gameplay.hultberg.org with SSL
+**Key Files**:
+- `index.html` - Main application interface
+- `game.js` - Core game logic (`GamePlayRandomiser` class)
+- `worker.js` - CloudFlare Workers deployment wrapper
+- `wrangler.toml` - Deployment configuration
+
+**Architecture**: Simple vanilla JavaScript with class-based state management, localStorage persistence, and CloudFlare Workers hosting.
+
+## Game Mechanics
+
+1. **Setup**: 54-card deck (52 + 2 jokers) split into 4 suit-based piles
+2. **Gameplay**: Draw one card from each pile per round (4 cards total)
+3. **Persistence**: Game state saved to localStorage, survives browser restarts
+4. **Reset**: Manual reset or automatic when piles are empty
+
+## Development Workflow
+
+**Quick Start**:
+```bash
+# Local development
+wrangler dev --local
+open http://localhost:8787
+
+# Deploy changes
+wrangler deploy
+```
+
+**Code Structure**:
+- `GamePlayRandomiser` class handles all game logic
+- Card data structure: `{suit, rank, isJoker}`
+- State persistence via `saveGameState()` and `loadGameState()`
+- UI updates through `updateDisplay()` method
+
+## Adding New Features
+
+**Common Extension Points**:
+1. **New Game Types**: Extend `GamePlayRandomiser` class or create new classes
+2. **UI Enhancements**: Modify `index.html` and CSS, update `updateDisplay()`
+3. **Storage**: Add new fields to game state object in `saveGameState()`
+4. **Game Rules**: Modify card creation in `createDeck()` or pile logic in `splitDeckIntoPiles()`
+
+**Best Practices**:
+- Keep game logic in `game.js`, UI in `index.html`
+- Maintain state persistence for any new features
+- Test locally before deploying
+- Update both `index.html` and `public/index.html` (Workers copy)
 
 ## Project Structure
 
-✅ **Complete Implementation**:
 ```
 /
-├── .claude/CLAUDE.md          # Collaboration guidelines (don't edit)
-├── .gitignore                 # Git ignore rules
-├── SPECIFICATIONS/
-│   └── OnePagerRequirements.md # Project requirements (updated with completion status)
-├── public/                    # CloudFlare Workers assets
-│   ├── index.html            # Main application (copy for Workers)
-│   └── game.js               # Game logic (copy for Workers)
-├── CLAUDE.md                  # This file - project-specific guidance
-├── README.md                  # Project overview and usage instructions
-├── index.html                 # Main application interface
-├── game.js                    # Core game logic and state management
-├── worker.js                  # CloudFlare Workers entry point
-└── wrangler.toml             # CloudFlare Workers configuration
+├── index.html, game.js        # Main application
+├── public/                    # CloudFlare Workers assets (copies)
+├── worker.js, wrangler.toml   # Deployment configuration
+├── SPECIFICATIONS/            # Requirements and technical docs
+│   ├── PhaseOneRequirements.md # Phase 1 details and implementation
+│   └── [Future phase files]   # To be added for new phases
+└── README.md                  # User-facing documentation
 ```
 
-## Core Game Logic (✅ ALL IMPLEMENTED)
+## Current Status & Future Phases
 
-**Initial Setup:**
-1. ✅ Create 54-card deck (52 standard + 2 jokers)
-2. ✅ Split into 4 piles by suit
-3. ✅ Randomly assign jokers to red (Hearts/Diamonds) and black (Spades/Clubs) piles
-4. ✅ Shuffle each pile independently
+**Phase One** ✅ **COMPLETED**: Basic card drawing functionality
+**Future Phases**: See `SPECIFICATIONS/PhaseOneRequirements.md` for enhancement opportunities (dice, tarot cards, configurable decks)
 
-**Game Play:**
-1. ✅ Draw top card from each of the 4 piles
-2. ✅ Display the 4 cards to user with proper suit colors and symbols
-3. ✅ Move drawn cards to discard pile
-4. ✅ Repeat until any pile is empty or user resets
-5. ✅ Persist game state in browser storage
-
-**Reset Functionality:**
-- ✅ Allow manual reset at any time
-- ✅ Auto-detection and messaging when any pile becomes empty
-- ✅ Game state restoration on page reload
-
-**Additional Features Implemented:**
-- ✅ Real-time pile count display
-- ✅ Visual card representation with suit colors
-- ✅ Special styling for jokers
-- ✅ Mobile-responsive interface
-- ✅ Error handling and user feedback
-
-## Development Commands
-
-**Local Development:**
-```bash
-# Test worker locally
-wrangler dev --local
-
-# View worker in browser at http://localhost:8787
-```
-
-**Deployment:**
-```bash
-# Deploy to CloudFlare Workers
-wrangler deploy
-
-# Deploy with custom domain (configured in wrangler.toml)
-# Deploys to: https://gameplay.hultberg.org
-```
-
-**Git Operations:**
-```bash
-# Standard development workflow
-git add .
-git commit -m "Description of changes"
-git push
-
-# The repository is at: https://github.com/mannepanne/game-play-randomiser
-```
-
-## Future Enhancement Opportunities
-
-From requirements document:
-- Configurable number of jokers (1-4+)
-- Alternative deck splitting (by card count vs suit)
-- Support for dice rolling
-- Support for tarot cards
+For detailed technical implementation, deployment commands, and Phase One requirements, see `SPECIFICATIONS/PhaseOneRequirements.md`.

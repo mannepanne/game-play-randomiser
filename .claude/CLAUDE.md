@@ -54,7 +54,7 @@
 2. **Scope Control**: Ask permission before major rewrites or scope changes
 3. **Technology Choices**: Justify new technology suggestions with clear benefits
 
-**Project documentation** refers to @README.md and @SPECIFICATIONS/OnePagerRequirements.md, and other project specific files in the @SPECIFICATIONS folder if there are any.
+**Project documentation** refers to @README.md and @SPECIFICATIONS/PhaseOneRequirements.md, and other project specific files in the @SPECIFICATIONS folder if there are any.
 
 ## Technology Stack and Choices
 

@@ -78,3 +78,88 @@ For each new game, there could be the option to specify:
 ## Future possible development
 
 I also play other games that require dice, or a deck of tarot cards. In the future we might consider adding functionality to support such games as well.
+
+---
+
+## Technical Implementation Overview (Phase One)
+
+### Technology Stack Used
+- **Frontend**: Vanilla HTML/CSS/JavaScript (single page application)
+- **Storage**: Local browser storage (localStorage for game state persistence)
+- **Styling**: Custom CSS with mobile-responsive design
+- **Hosting**: CloudFlare Workers with Assets API
+- **Domain**: Custom domain gameplay.hultberg.org with SSL
+- **Version Control**: Git with GitHub repository
+
+### Project Structure
+```
+/
+├── .claude/CLAUDE.md          # Collaboration guidelines (don't edit)
+├── .gitignore                 # Git ignore rules
+├── SPECIFICATIONS/
+│   └── PhaseOneRequirements.md # This file - Phase 1 requirements
+├── public/                    # CloudFlare Workers assets
+│   ├── index.html            # Main application (copy for Workers)
+│   └── game.js               # Game logic (copy for Workers)
+├── CLAUDE.md                  # Project guidance for developers
+├── README.md                  # Project overview and usage instructions
+├── index.html                 # Main application interface
+├── game.js                    # Core game logic and state management
+├── worker.js                  # CloudFlare Workers entry point
+└── wrangler.toml             # CloudFlare Workers configuration
+```
+
+### Core Game Logic Implementation
+**Initial Setup:**
+- ✅ Create 54-card deck (52 standard + 2 jokers) using standard ranks and suits
+- ✅ Split into 4 piles by suit with Fisher-Yates shuffle algorithm
+- ✅ Random joker assignment to red (Hearts/Diamonds) and black (Spades/Clubs) piles
+- ✅ Independent shuffling of each pile
+
+**Game Play Implementation:**
+- ✅ Draw top card from each of 4 piles with visual display
+- ✅ Card display with proper suit colors (red/black) and symbols
+- ✅ Special golden styling for jokers
+- ✅ Discard pile management (cards moved after drawing)
+- ✅ Game state persistence using localStorage
+- ✅ Auto-detection when piles are empty
+
+**User Interface Features:**
+- ✅ Real-time pile count display for each suit
+- ✅ Visual card representation with suit symbols
+- ✅ "Draw Cards" button (draws one from each pile)
+- ✅ "Reset Game" button for manual reset
+- ✅ Game status messages and user feedback
+- ✅ Mobile-responsive layout for phone usage
+
+### Development Commands
+**Local Development:**
+```bash
+# Test worker locally
+wrangler dev --local
+# View at http://localhost:8787
+```
+
+**Deployment:**
+```bash
+# Deploy to CloudFlare Workers
+wrangler deploy
+# Deploys to: https://gameplay.hultberg.org
+```
+
+**Git Operations:**
+```bash
+# Standard development workflow
+git add .
+git commit -m "Description of changes"
+git push
+# Repository: https://github.com/mannepanne/game-play-randomiser
+```
+
+### Performance & Architecture Notes
+- **State Management**: Simple JavaScript class-based architecture
+- **Storage**: localStorage with JSON serialization for game state
+- **Randomization**: Proper Fisher-Yates shuffle implementation
+- **Error Handling**: Graceful handling of empty piles and storage errors
+- **Caching**: CloudFlare Workers provides edge caching for static assets
+- **SSL**: Automatic SSL certificate provisioning via CloudFlare
