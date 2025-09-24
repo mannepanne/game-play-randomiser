@@ -26,11 +26,17 @@ pids
 *.seed
 *.pid.lock
 
+# Dependencies
+node_modules/
+
 # Optional npm cache directory
 .npm
 
 # Optional eslint cache
 .eslintcache
+
+# Wrangler
+.wrangler/
 
 # Environment variables
 .env
